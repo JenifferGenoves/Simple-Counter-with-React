@@ -3,19 +3,26 @@ import Counter from "./Counter";
 import { FaClock} from "react-icons/fa"
 
 
-//create your first component
+
 const Home = () => {
 
 	const [timer, setTimer] = useState(0);
+	const [active, setActive] = useState(false)
 
 	useEffect(() => {
-		
-		
-		setTimeout (() => {
+		if(active) {
+			setTimeout (() => {
 			setTimer(value => value + 1)
-		}, 1000)
+		}, 1000)	
+		}
+		
+	}, [timer, active]);
 
-	}, [timer]);
+// Función para botones Start y Stop
+ const buttons = () => setActive(value => value=!value)
+
+ // Función para botoón Reset
+ const resetButton = () => setTimer(value => value=0)
 
 	return (
 		<main className="text-center">
@@ -27,6 +34,21 @@ const Home = () => {
 				<Counter number={Math.floor(timer/100)%10}/>
 				<Counter number={Math.floor(timer/10)%10}/>
 				<Counter number={Math.floor(timer%10)}/>
+			</section>
+			{/* Bonus */}
+			<section className="container text-center">
+				<h2>Counter controller</h2>
+				<div>
+					<button
+					disabled={active}
+					onClick={buttons} className="mx-1 btn btn-success">Start</button>
+					<button
+					disabled={!active}
+					onClick={buttons} className="mx-1 btn btn-secondary">Stop</button>
+					<button 
+					onClick={resetButton} className="mx-1 btn btn-danger">Reset</button>
+				</div>
+
 			</section>
 			
 		</main>
