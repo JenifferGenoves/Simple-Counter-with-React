@@ -3,56 +3,67 @@ import Counter from "./Counter";
 import { FaClock} from "react-icons/fa"
 
 
+// Función para obtener los dígitos del contador 
+
+const getDigits = (time) => {
+	const paddedTime = String(time).padStart(6, '0');
+	return Array.from(paddedTime.slice(-6)).map(Number);
+};
 
 const Home = () => {
-
+	//Estado time presenta segundos transcurridos
 	const [timer, setTimer] = useState(0);
 	const [active, setActive] = useState(false)
 
+	// setInterval para limpiar
 	useEffect(() => {
-		if(active) {
-			setTimeout (() => {
-			setTimer(value => value + 1)
-		}, 1000)	
-		}
+		let interval = null;
 		
-	}, [timer, active]);
+		if(active) {
+			// Establecer intervalo
+			interval = setInterval(() => {
+				setTimer(prevTimer => prevTimer + 1);
+			}, 1000);
+		}
 
-// Función para botones Start y Stop
- const buttons = () => setActive(value => value=!value)
+	return () => clearInterval(interval); // Función para limpiar
 
- // Función para botoón Reset
- const resetButton = () => setTimer(value => value=0)
+	}, [active]); // Se ejecuta cuando active cambia
+
+	// Funciones
+	const handleToggle = () => setActive(prevActive => !prevActive);
+
+	// Reinicia contador 
+	const handleReset = () => {
+		setTimer(0);
+		setActive(false);
+	};
+
+	const digits = getDigits(timer);
 
 	return (
 		<main className="text-center">
 			<section className="counter-container">
 				<Counter number={<FaClock/>}/>
-				<Counter number={Math.floor(timer/100000)%10}/>
-				<Counter number={Math.floor(timer/10000)%10}/>
-				<Counter number={Math.floor(timer/1000)%10}/>
-				<Counter number={Math.floor(timer/100)%10}/>
-				<Counter number={Math.floor(timer/10)%10}/>
-				<Counter number={Math.floor(timer%10)}/>
+				{digits.map((digit, index) => (
+                <Counter key={index} number={digit} />
+                ))}
 			</section>
-			{/* Bonus */}
 			<section className="container text-center">
 				<h2>Counter controller</h2>
 				<div>
 					<button
 					disabled={active}
-					onClick={buttons} className="mx-1 btn btn-success">Start</button>
+					onClick={handleToggle} className="mx-1 btn btn-success">Start</button>
 					<button
 					disabled={!active}
-					onClick={buttons} className="mx-1 btn btn-secondary">Stop</button>
+					onClick={handleToggle} className="mx-1 btn btn-secondary">Stop</button>
 					<button 
-					onClick={resetButton} className="mx-1 btn btn-danger">Reset</button>
+					onClick={handleReset} className="mx-1 btn btn-danger">Reset</button>
 				</div>
-
 			</section>
-			
 		</main>
-	);
+	)
 };
 
 export default Home;
@@ -68,4 +79,3 @@ export default Home;
 
 
 
-//Cuando timer es ejecutado, ejecuta un setTimeout, que espera un segundo para cambiar el valor de timer, set timer recibe el valor que tieme timer y le suma 1
