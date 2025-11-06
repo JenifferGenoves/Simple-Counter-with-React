@@ -63,7 +63,7 @@ const Home = () => {
 					onClick={resetButton} className="mx-1 btn btn-danger">Reset</button>
 				</div>
 			</section>
-			<section className="container text-center">
+			<section className="container text-center my-5">
 				<h2>CountDown</h2>
 				<form
 				className="form-control"
