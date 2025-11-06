@@ -1,28 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Counter from "./Counter";
+import { FaClock} from "react-icons/fa"
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
+	const [timer, setTimer] = useState(0);
+
+	useEffect(() => {
+		
+		
+		setTimeout (() => {
+			setTimer(value => value + 1)
+		}, 1000)
+
+	}, [timer]);
+
+	return (
+		<main className="text-center">
+			<section className="counter-container">
+				<Counter number={<FaClock/>}/>
+				<Counter number={Math.floor(timer/100000)%10}/>
+				<Counter number={Math.floor(timer/10000)%10}/>
+				<Counter number={Math.floor(timer/1000)%10}/>
+				<Counter number={Math.floor(timer/100)%10}/>
+				<Counter number={Math.floor(timer/10)%10}/>
+				<Counter number={Math.floor(timer%10)}/>
+			</section>
+			
+		</main>
 	);
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+//Cuando timer es ejecutado, ejecuta un setTimeout, que espera un segundo para cambiar el valor de timer, set timer recibe el valor que tieme timer y le suma 1
